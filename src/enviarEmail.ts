@@ -114,8 +114,17 @@ async function enviarEmailSMTP(params: EnviarEmailParams): Promise<any> {
   };
 }
 
-async function enviarEmail(params: EnviarEmailParams): Promise<void> {
-  try {
+async function enviarEmail(params: any): Promise<void> {
+  // Se params for array e o primeiro item for string JSON, faz o parse
+  if (Array.isArray(params) && typeof params[0] === "string") {
+    try {
+      params = JSON.parse(params[0]);
+    } catch {
+      // fallback: argumentos posicionais
+      const [para, assunto, mensagem] = params;
+      params = { para, assunto, mensagem };
+    }
+  }  try {
     // Validar parâmetros obrigatórios
     if (!params.para) {
       console.log(
