@@ -18,7 +18,7 @@
     "author": "DocGo",
     "license": "MIT",
     "dependencies": {
-        "docgo-sdk": "file:../../sdk-js"
+        "docgo-sdk": "github:doc9-oficial/docgo-sdk-js"
     },
     "devDependencies": {
         "@types/node": "^20.0.0",
