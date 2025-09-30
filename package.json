@@ -1,0 +1,27 @@
+{
+    "name": "email-app",
+    "version": "1.0.0",
+    "description": "Aplicação para envio de emails via SMTP",
+    "main": "dist/enviarEmail.js",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "clean": "rm -rf dist"
+    },
+    "keywords": [
+        "email",
+        "smtp",
+        "mensagens",
+        "comunicacao",
+        "docgo"
+    ],
+    "author": "DocGo",
+    "license": "MIT",
+    "dependencies": {
+        "docgo-sdk": "file:../../sdk-js"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "typescript": "^5.0.0"
+    }
+}
