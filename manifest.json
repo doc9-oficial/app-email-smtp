@@ -1,84 +1,112 @@
 {
-    "name": "email",
-    "version": "1.0.0",
-    "description": "Aplicação para envio de emails via SMTP",
+    "name": "app-email-smtp",
+    "version": "2.0.0",
+    "description": "Aplicação para envio de emails via SMTP.",
+    "auth": {
+        "description": {
+            "title": "Configurações de Email (SMTP)",
+            "body": "Configure as credenciais para envio de emails via SMTP.",
+            "link": ""
+        },
+        "params": [
+            {
+                "name": "host",
+                "type": "string",
+                "inputType": "text",
+                "required": true
+            },
+            {
+                "name": "port",
+                "type": "string",
+                "inputType": "text",
+                "required": true
+            },
+            {
+                "name": "secure",
+                "type": "boolean",
+                "inputType": "select",
+                "required": true,
+                "options": [
+                    {
+                        "label": "True",
+                        "value": true
+                    },
+                    {
+                        "label": "False",
+                        "value": false
+                    }
+                ]
+            },
+            {
+                "name": "user",
+                "type": "string",
+                "inputType": "text",
+                "required": true,
+                "label": "Usuário"
+            },
+            {
+                "name": "pass",
+                "type": "string",
+                "inputType": "password",
+                "required": true,
+                "label": "Senha"
+            }
+        ]
+    },
     "functions": {
         "enviarEmail": {
             "script": "dist/enviarEmail.js",
-            "description": "Envia um email via SMTP",
+            "description": "Envia um email via SMTP, Gmail ou Outlook",
             "category": "comunicacao",
+            "values": {
+                "para": "",
+                "assunto": "",
+                "mensagem": "",
+                "cc": "",
+                "bcc": "",
+                "html": false,
+                "provedor": "smtp"
+            },
             "params": [
                 {
                     "name": "para",
                     "type": "string",
+                    "inputType": "text",
                     "required": true,
-                    "description": "Endereço de email do destinatário",
-                    "form": {
-                        "type": "text",
-                        "label": "Para",
-                        "placeholder": "Ex: destinatario@exemplo.com",
-                        "help": "Digite o endereço de email do destinatário"
-                    }
+                    "label": "Para",
+                    "description": "Endereço de email do destinatário"
                 },
                 {
                     "name": "assunto",
                     "type": "string",
+                    "inputType": "text",
                     "required": true,
-                    "description": "Assunto do email",
-                    "form": {
-                        "type": "text",
-                        "label": "Assunto",
-                        "placeholder": "Ex: Assunto do email",
-                        "help": "Digite o assunto do email"
-                    }
+                    "label": "Assunto",
+                    "description": "Assunto do email"
                 },
                 {
                     "name": "mensagem",
                     "type": "string",
+                    "inputType": "textarea",
                     "required": true,
-                    "description": "Conteúdo da mensagem",
-                    "form": {
-                        "type": "textarea",
-                        "label": "Mensagem",
-                        "placeholder": "Digite o conteúdo do email aqui...",
-                        "help": "Digite o conteúdo da mensagem que será enviada",
-                        "rows": 6
-                    }
+                    "label": "Mensagem",
+                    "description": "Conteúdo da mensagem"
                 },
                 {
                     "name": "cc",
                     "type": "string",
+                    "inputType": "text",
                     "required": false,
-                    "description": "Endereço de email para cópia",
-                    "form": {
-                        "type": "text",
-                        "label": "CC (Cópia)",
-                        "placeholder": "Ex: copia@exemplo.com",
-                        "help": "Digite o endereço de email para cópia (opcional)"
-                    }
+                    "label": "CC (Cópia)",
+                    "description": "Endereço de email para cópia"
                 },
                 {
                     "name": "bcc",
                     "type": "string",
+                    "inputType": "text",
                     "required": false,
-                    "description": "Endereço de email para cópia oculta",
-                    "form": {
-                        "type": "text",
-                        "label": "BCC (Cópia Oculta)",
-                        "placeholder": "Ex: copia.oculta@exemplo.com",
-                        "help": "Digite o endereço de email para cópia oculta (opcional)"
-                    }
-                },
-                {
-                    "name": "html",
-                    "type": "boolean",
-                    "required": false,
-                    "description": "Enviar mensagem em formato HTML",
-                    "form": {
-                        "type": "switch",
-                        "label": "Formato HTML",
-                        "help": "Marque para enviar a mensagem em formato HTML"
-                    }
+                    "label": "BCC (Cópia Oculta)",
+                    "description": "Endereço de email para cópia oculta"
                 }
             ]
         }

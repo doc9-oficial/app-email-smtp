@@ -1,4 +1,5 @@
 import docgo from "docgo-sdk";
+import nodemailer from "nodemailer";
 
 interface EnviarEmailParams {
   para: string;
@@ -9,9 +10,10 @@ interface EnviarEmailParams {
   html?: boolean;
   anexos?: Array<{
     nome: string;
-    conteudo: string; // Base64
-    tipo: string; // MIME type
+    conteudo: string;
+    tipo: string; 
   }>;
+  provedor?: "smtp"; // somente SMTP por enquanto
 }
 
 interface SMTPConfig {
@@ -25,16 +27,16 @@ interface SMTPConfig {
 }
 
 async function enviarEmailSMTP(params: EnviarEmailParams): Promise<any> {
-  // Configuração SMTP
-  const smtpHost = docgo.getEnv("SMTP_HOST");
-  const smtpPort = parseInt(docgo.getEnv("SMTP_PORT") || "587");
-  const smtpSecure = docgo.getEnv("SMTP_SECURE") === "true";
-  const smtpUser = docgo.getEnv("SMTP_USER");
-  const smtpPass = docgo.getEnv("SMTP_PASS");
+  const smtpHost = docgo.getEnv("SMTP_HOST") || docgo.getEnv("host");
+  const smtpPort = parseInt(docgo.getEnv("SMTP_PORT") || docgo.getEnv("port") || "587");
+  const smtpSecure = docgo.getEnv("SMTP_SECURE") === "true" || docgo.getEnv("secure") === "true";
+  const smtpUser = docgo.getEnv("SMTP_USER") || docgo.getEnv("user");
+  const smtpPass = docgo.getEnv("SMTP_PASS") || docgo.getEnv("pass");
+  const smtpFrom = docgo.getEnv("SMTP_FROM") || docgo.getEnv("from") || smtpUser || "";
 
   if (!smtpHost || !smtpUser || !smtpPass) {
     throw new Error(
-      "Configuração SMTP incompleta. Configure SMTP_HOST, SMTP_USER e SMTP_PASS"
+      "Configuração SMTP incompleta. Configure host, user e pass."
     );
   }
 
@@ -48,84 +50,56 @@ async function enviarEmailSMTP(params: EnviarEmailParams): Promise<any> {
     },
   };
 
-  // Construir o email
-  const emailData = {
-    from: smtpUser,
-    to: params.para,
-    subject: params.assunto,
-    text: params.html ? undefined : params.mensagem,
-    html: params.html ? params.mensagem : undefined,
-    cc: params.cc,
-    bcc: params.bcc,
-    attachments: params.anexos?.map((anexo) => ({
-      filename: anexo.nome,
-      content: anexo.conteudo,
-      contentType: anexo.tipo,
-      encoding: "base64",
-    })),
-  };
-
-  // Simular envio via API REST (já que não temos acesso direto ao SMTP)
-  const apiUrl =
-    docgo.getEnv("EMAIL_API_URL") ||
-    "https://api.emailjs.com/api/v1.0/email/send";
-
-  const payload = {
-    service_id: docgo.getEnv("EMAIL_SERVICE_ID"),
-    template_id: docgo.getEnv("EMAIL_TEMPLATE_ID"),
-    user_id: docgo.getEnv("EMAIL_USER_ID"),
-    template_params: {
-      to_email: params.para,
-      from_name: smtpUser,
+  try {
+    const transporter = nodemailer.createTransport(config);
+    
+    await transporter.verify();
+    
+    const emailData: nodemailer.SendMailOptions = {
+      from: smtpFrom,
+      to: params.para,
       subject: params.assunto,
-      message: params.mensagem,
+      text: params.html ? undefined : params.mensagem,
+      html: params.html ? params.mensagem : undefined,
       cc: params.cc,
       bcc: params.bcc,
-    },
-  };
+      attachments: params.anexos?.map((anexo) => ({
+        filename: anexo.nome,
+        content: Buffer.from(anexo.conteudo, 'base64'),
+        contentType: anexo.tipo
+      }))
+    };
 
-  const headers = {
-    "Content-Type": "application/json",
-  };
+    const info = await transporter.sendMail(emailData);
 
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Falha HTTP ${response.status}: ${response.statusText}`);
+    return {
+      success: true,
+      messageId: info?.messageId || `smtp_${Date.now()}`,
+      config: {
+        host: config.host,
+        port: config.port,
+        secure: config.secure,
+        user: config.auth.user,
+      },
+      emailData: {
+        from: smtpFrom,
+        to: params.para,
+        subject: params.assunto,
+        cc: params.cc,
+        bcc: params.bcc
+      },
+      apiResponse: info
+    };
+  } catch (error: any) {
+    throw new Error(`Falha ao enviar email via SMTP: ${error.message}`);
   }
-
-  const result = await response.json();
-
-  return {
-    success: true,
-    messageId: result.message_id || `email_${Date.now()}`,
-    config: {
-      host: config.host,
-      port: config.port,
-      secure: config.secure,
-      user: config.auth.user,
-    },
-    emailData,
-    apiResponse: result,
-  };
 }
 
 async function enviarEmail(params: any): Promise<void> {
-  // Se params for array e o primeiro item for string JSON, faz o parse
-  if (Array.isArray(params) && typeof params[0] === "string") {
-    try {
-      params = JSON.parse(params[0]);
-    } catch {
-      // fallback: argumentos posicionais
-      const [para, assunto, mensagem] = params;
-      params = { para, assunto, mensagem };
-    }
-  }  try {
-    // Validar parâmetros obrigatórios
+  if (Array.isArray(params) && params.length === 1 && typeof params[0] === 'object') {
+    params = params[0];
+  }  
+  try {
     if (!params.para) {
       console.log(
         docgo.result(false, null, "É necessário informar o destinatário (para)")
@@ -145,7 +119,6 @@ async function enviarEmail(params: any): Promise<void> {
       return;
     }
 
-    // Validar formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(params.para)) {
       console.log(
@@ -172,9 +145,9 @@ async function enviarEmail(params: any): Promise<void> {
       return;
     }
 
-    // Enviar email
-    const resultado = await enviarEmailSMTP(params);
+    const provedor = params.provedor || "smtp";
 
+    let resultado = await enviarEmailSMTP(params);
     const resposta = {
       sucesso: true,
       para: params.para,
@@ -184,7 +157,7 @@ async function enviarEmail(params: any): Promise<void> {
       html: params.html || false,
       anexos: params.anexos?.length || 0,
       messageId: resultado.messageId,
-      config: resultado.config,
+      provedor,
       timestamp: new Date().toISOString(),
     };
 
