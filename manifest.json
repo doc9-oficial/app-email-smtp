@@ -29,11 +29,11 @@
                 "options": [
                     {
                         "label": "True",
-                        "value": true
+                        "value": "true"
                     },
                     {
                         "label": "False",
-                        "value": false
+                        "value": "false"
                     }
                 ]
             },
@@ -108,7 +108,12 @@
                     "label": "BCC (Cópia Oculta)",
                     "description": "Endereço de email para cópia oculta"
                 }
-            ]
+            ],
+            "help": {
+                "title": "Como usar a função enviarEmail",
+                "body": "Para utilizar a função enviarEmail, preencha os campos 'para', 'assunto' e 'mensagem' com as informações apropriadas. Você pode opcionalmente adicionar endereços de email nos campos 'cc' e 'bcc'. A função enviará o email utilizando as configurações SMTP fornecidas na autenticação.",
+                "footer": "Certifique-se de que as configurações SMTP estejam corretas para garantir o envio bem-sucedido do email."
+            }
         }
     },
     "config": {
