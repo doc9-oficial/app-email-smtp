@@ -55,6 +55,7 @@
     },
     "functions": {
         "enviarEmail": {
+            "name": "Enviar Email - SMTP",
             "script": "dist/enviarEmail.js",
             "description": "Envia um email via SMTP, Gmail ou Outlook",
             "category": "comunicacao",
