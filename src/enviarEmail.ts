@@ -29,7 +29,7 @@ interface SMTPConfig {
 async function enviarEmailSMTP(params: EnviarEmailParams): Promise<any> {
   const smtpHost = docgo.getEnv("SMTP_HOST") || docgo.getEnv("host");
   const smtpPort = parseInt(docgo.getEnv("SMTP_PORT") || docgo.getEnv("port") || "587");
-  const smtpSecure = docgo.getEnv("SMTP_SECURE") === "true" || docgo.getEnv("secure") === "true";
+  const smtpSecure = docgo.getEnv("SMTP_SECURE") === "true" || docgo.getEnv("secure") === "true" || true;
   const smtpUser = docgo.getEnv("SMTP_USER") || docgo.getEnv("user");
   const smtpPass = docgo.getEnv("SMTP_PASS") || docgo.getEnv("pass");
   const smtpFrom = docgo.getEnv("SMTP_FROM") || docgo.getEnv("from") || smtpUser || "";

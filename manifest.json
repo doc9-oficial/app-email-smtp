@@ -22,22 +22,6 @@
                 "required": true
             },
             {
-                "name": "secure",
-                "type": "boolean",
-                "inputType": "select",
-                "required": true,
-                "options": [
-                    {
-                        "label": "True",
-                        "value": "true"
-                    },
-                    {
-                        "label": "False",
-                        "value": "false"
-                    }
-                ]
-            },
-            {
                 "name": "user",
                 "type": "string",
                 "inputType": "text",
