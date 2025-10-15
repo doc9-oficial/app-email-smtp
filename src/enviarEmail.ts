@@ -11,7 +11,7 @@ interface EnviarEmailParams {
   anexos?: Array<{
     nome: string;
     conteudo: string;
-    tipo: string; 
+    tipo: string;
   }>;
   provedor?: "smtp"; // somente SMTP por enquanto
 }
@@ -52,9 +52,9 @@ async function enviarEmailSMTP(params: EnviarEmailParams): Promise<any> {
 
   try {
     const transporter = nodemailer.createTransport(config);
-    
+
     await transporter.verify();
-    
+
     const emailData: nodemailer.SendMailOptions = {
       from: smtpFrom,
       to: params.para,
@@ -98,7 +98,7 @@ async function enviarEmailSMTP(params: EnviarEmailParams): Promise<any> {
 async function enviarEmail(params: any): Promise<void> {
   if (Array.isArray(params) && params.length === 1 && typeof params[0] === 'object') {
     params = params[0];
-  }  
+  }
   try {
     if (!params.para) {
       console.log(
@@ -161,9 +161,9 @@ async function enviarEmail(params: any): Promise<void> {
       timestamp: new Date().toISOString(),
     };
 
-    console.log(docgo.result(true, resposta));
+    return console.log(docgo.result(true, resposta));
   } catch (error: any) {
-    console.log(docgo.result(false, null, error.message));
+    return console.log(docgo.result(false, null, error.message));
   }
 }
 
