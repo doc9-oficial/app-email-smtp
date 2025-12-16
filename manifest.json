@@ -1,111 +1,113 @@
 {
-    "name": "app-email-smtp",
-    "version": "2.0.0",
-    "description": "Aplicação para envio de emails via SMTP.",
-    "auth": {
-        "description": {
-            "title": "Configurações de Email (SMTP)",
-            "body": "Configure as credenciais para envio de emails via SMTP.",
-            "link": ""
+  "name": "app-email-smtp",
+  "version": "2.0.0",
+  "description": "Aplicação para envio de emails via SMTP.",
+  "auth": {
+    "description": {
+      "title": "Configurações de Email (SMTP)",
+      "body": "Configure as credenciais para envio de emails via SMTP.",
+      "link": ""
+    },
+    "params": [
+      {
+        "name": "host",
+        "type": "string",
+        "inputType": "text",
+        "label": "Domínio",
+        "required": true
+      },
+      {
+        "name": "port",
+        "type": "string",
+        "inputType": "text",
+        "label": "Porta",
+        "required": true
+      },
+      {
+        "name": "user",
+        "type": "string",
+        "inputType": "text",
+        "required": true,
+        "label": "Usuário"
+      },
+      {
+        "name": "pass",
+        "type": "string",
+        "inputType": "password",
+        "required": true,
+        "label": "Senha"
+      }
+    ]
+  },
+  "functions": {
+    "enviarEmail": {
+      "name": "Enviar Email - SMTP",
+      "icon": "Mail",
+      "script": "dist/enviarEmail.js",
+      "description": "Envia um email via SMTP, Gmail ou Outlook",
+      "category": "comunicacao",
+      "values": {
+        "para": "",
+        "assunto": "",
+        "mensagem": "",
+        "cc": "",
+        "bcc": "",
+        "html": false,
+        "provedor": "smtp"
+      },
+      "params": [
+        {
+          "name": "para",
+          "type": "string",
+          "inputType": "text",
+          "required": true,
+          "label": "Para",
+          "description": "Endereço de email do destinatário"
         },
-        "params": [
-            {
-                "name": "host",
-                "type": "string",
-                "inputType": "text",
-                "required": true
-            },
-            {
-                "name": "port",
-                "type": "string",
-                "inputType": "text",
-                "required": true
-            },
-            {
-                "name": "user",
-                "type": "string",
-                "inputType": "text",
-                "required": true,
-                "label": "Usuário"
-            },
-            {
-                "name": "pass",
-                "type": "string",
-                "inputType": "password",
-                "required": true,
-                "label": "Senha"
-            }
-        ]
-    },
-    "functions": {
-        "enviarEmail": {
-            "name": "Enviar Email - SMTP",
-            "icon": "Mail",
-            "script": "dist/enviarEmail.js",
-            "description": "Envia um email via SMTP, Gmail ou Outlook",
-            "category": "comunicacao",
-            "values": {
-                "para": "",
-                "assunto": "",
-                "mensagem": "",
-                "cc": "",
-                "bcc": "",
-                "html": false,
-                "provedor": "smtp"
-            },
-            "params": [
-                {
-                    "name": "para",
-                    "type": "string",
-                    "inputType": "text",
-                    "required": true,
-                    "label": "Para",
-                    "description": "Endereço de email do destinatário"
-                },
-                {
-                    "name": "assunto",
-                    "type": "string",
-                    "inputType": "text",
-                    "required": true,
-                    "label": "Assunto",
-                    "description": "Assunto do email"
-                },
-                {
-                    "name": "mensagem",
-                    "type": "string",
-                    "inputType": "textarea",
-                    "required": true,
-                    "label": "Mensagem",
-                    "description": "Conteúdo da mensagem"
-                },
-                {
-                    "name": "cc",
-                    "type": "string",
-                    "inputType": "text",
-                    "required": false,
-                    "label": "CC (Cópia)",
-                    "description": "Endereço de email para cópia"
-                },
-                {
-                    "name": "bcc",
-                    "type": "string",
-                    "inputType": "text",
-                    "required": false,
-                    "label": "BCC (Cópia Oculta)",
-                    "description": "Endereço de email para cópia oculta"
-                }
-            ],
-            "help": {
-                "title": "Como usar a função enviarEmail",
-                "body": "Para utilizar a função enviarEmail, preencha os campos 'para', 'assunto' e 'mensagem' com as informações apropriadas. Você pode opcionalmente adicionar endereços de email nos campos 'cc' e 'bcc'. A função enviará o email utilizando as configurações SMTP fornecidas na autenticação.",
-                "footer": "Certifique-se de que as configurações SMTP estejam corretas para garantir o envio bem-sucedido do email."
-            }
+        {
+          "name": "assunto",
+          "type": "string",
+          "inputType": "text",
+          "required": true,
+          "label": "Assunto",
+          "description": "Assunto do email"
+        },
+        {
+          "name": "mensagem",
+          "type": "string",
+          "inputType": "textarea",
+          "required": true,
+          "label": "Mensagem",
+          "description": "Conteúdo da mensagem"
+        },
+        {
+          "name": "cc",
+          "type": "string",
+          "inputType": "text",
+          "required": false,
+          "label": "CC (Cópia)",
+          "description": "Endereço de email para cópia"
+        },
+        {
+          "name": "bcc",
+          "type": "string",
+          "inputType": "text",
+          "required": false,
+          "label": "BCC (Cópia Oculta)",
+          "description": "Endereço de email para cópia oculta"
         }
-    },
-    "config": {
-        "timeout": 30000,
-        "max_retries": 3,
-        "cache_ttl": 0
-    },
-    "mcp": true
+      ],
+      "help": {
+        "title": "Como usar a função enviarEmail",
+        "body": "Para utilizar a função enviarEmail, preencha os campos 'para', 'assunto' e 'mensagem' com as informações apropriadas. Você pode opcionalmente adicionar endereços de email nos campos 'cc' e 'bcc'. A função enviará o email utilizando as configurações SMTP fornecidas na autenticação.",
+        "footer": "Certifique-se de que as configurações SMTP estejam corretas para garantir o envio bem-sucedido do email."
+      }
+    }
+  },
+  "config": {
+    "timeout": 30000,
+    "max_retries": 3,
+    "cache_ttl": 0
+  },
+  "mcp": true
 }
