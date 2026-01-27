@@ -5,7 +5,7 @@
   "auth": {
     "description": {
       "title": "Configurações de Email (SMTP)",
-      "body": "Para conectar sua caixa de e-mails, basta acessar as configurações da sua conta e então acessar as configurações de IMAP/POP para abrir as informações do servidor (domínio e porta)."
+      "body": "Para conectar sua caixa de e-mails, basta acessar as configurações da sua conta e então acessar as configurações de IMAP/POP para abrir as informações do servidor (domínio e porta).",
       "link": [
         {
           "label": "Acessar Gmail",
