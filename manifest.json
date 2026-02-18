@@ -1,5 +1,6 @@
 {
   "name": "app-email-smtp",
+  "displayName": "E-mail",
   "version": "2.0.0",
   "description": "Aplicação para envio de emails via SMTP.",
   "icon": "Mail",
