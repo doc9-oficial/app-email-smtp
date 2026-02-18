@@ -2,6 +2,7 @@
   "name": "app-email-smtp",
   "version": "2.0.0",
   "description": "Aplicação para envio de emails via SMTP.",
+  "icon": "Mail",
   "auth": {
     "description": {
       "title": "Configurações de Email (SMTP)",
